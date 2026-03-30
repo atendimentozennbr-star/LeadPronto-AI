@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Zap } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { usageColour } from "@/lib/utils"
 
 interface UsageCardProps {
   used: number
@@ -34,7 +35,7 @@ export function UsageCard({ used, limit, plan, resetDate }: UsageCardProps) {
           <span className="text-2xl font-bold text-[#0F172A]">{used}</span>
           <span className="text-[#64748B] text-sm">/ {limit} gerações</span>
         </div>
-        <Progress value={percent} className="h-2 mb-2" />
+        <Progress value={percent} className="h-2 mb-2" indicatorClassName={usageColour(percent)} />
         <div className="flex items-center justify-between">
           <p className="text-[#64748B] text-xs">{remaining} restantes este mês</p>
           {percent >= 80 && (

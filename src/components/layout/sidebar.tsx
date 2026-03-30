@@ -8,7 +8,7 @@ import {
   BarChart2, Clock, Settings, ChevronRight, LogOut, Menu, X,
   Sparkles, User
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, usageColour } from "@/lib/utils"
 import { createClient } from "@/lib/supabase/client"
 
 const navItems = [
@@ -99,10 +99,7 @@ export function Sidebar({
         </div>
         <div className="w-full h-1.5 bg-[#1E293B] rounded-full overflow-hidden">
           <div
-            className={cn(
-              "h-full rounded-full transition-all",
-              usagePercent >= 90 ? "bg-red-500" : usagePercent >= 70 ? "bg-[#F59E0B]" : "bg-[#16A34A]"
-            )}
+            className={cn("h-full rounded-full transition-all", usageColour(usagePercent))}
             style={{ width: `${Math.min(usagePercent, 100)}%` }}
           />
         </div>

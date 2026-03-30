@@ -12,10 +12,14 @@ export async function createClient() {
           return cookieStore.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          try { cookieStore.set({ name, value, ...options }) } catch {}
+          try { cookieStore.set({ name, value, ...options }) } catch {
+            // set/remove are no-ops in Server Components where the cookie store is read-only
+          }
         },
         remove(name: string, options: CookieOptions) {
-          try { cookieStore.set({ name, value: '', ...options }) } catch {}
+          try { cookieStore.set({ name, value: '', ...options }) } catch {
+            // set/remove are no-ops in Server Components where the cookie store is read-only
+          }
         },
       },
     }

@@ -1,6 +1,19 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const PROTECTED_ROUTES = [
+  '/dashboard',
+  '/onboarding',
+  '/oferta-dna',
+  '/conteudo',
+  '/whatsapp',
+  '/campanha',
+  '/funil',
+  '/analytics',
+  '/historico',
+  '/configuracoes',
+]
+
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -32,10 +45,8 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const isAppRoute = request.nextUrl.pathname.startsWith('/(app)') || 
-    ['/dashboard', '/onboarding', '/oferta-dna', '/conteudo', '/whatsapp', '/campanha', '/funil', '/analytics', '/historico', '/configuracoes'].some(
-      path => request.nextUrl.pathname.startsWith(path)
-    )
+  const isAppRoute = request.nextUrl.pathname.startsWith('/(app)') ||
+    PROTECTED_ROUTES.some(path => request.nextUrl.pathname.startsWith(path))
 
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || 
     request.nextUrl.pathname.startsWith('/register')

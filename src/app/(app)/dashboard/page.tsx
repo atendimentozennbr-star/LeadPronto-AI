@@ -255,7 +255,7 @@ export default async function DashboardPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[#0F172A] text-sm font-medium truncate">
-                          {(followup.leads as { name: string } | null)?.name ?? "Lead"}
+                          {(followup.leads as unknown as { name: string } | null)?.name ?? "Lead"}
                         </p>
                         <p className="text-[#64748B] text-xs truncate">{followup.content ?? followup.type}</p>
                         <p className="text-[#94A3B8] text-xs">

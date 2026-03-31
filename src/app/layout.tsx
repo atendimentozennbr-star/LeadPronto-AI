@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-
-const geist = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "LeadPronto AI - Pare de perder vendas",
@@ -20,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${geist.variable} h-full`}>
+    <html lang="pt-BR" className="h-full">
       <body className="h-full antialiased">
         {children}
         <Toaster

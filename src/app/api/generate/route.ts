@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -22,6 +20,20 @@ export async function POST(request: NextRequest) {
     engajar: "engajar audiência",
     educar: "educar o mercado",
   }
+
+  const painText = mainPain?.toLowerCase() ?? "sua principal dor"
+  const mockFallback = {
+    headline: `${brandName}: a solução que seu negócio precisava`,
+    postIdea: `Você sabia que ${painText}? Por isso criamos ${(productDescription ?? "").substring(0, 60)}... Clique no link da bio e saiba mais!`,
+    whatsappMessage: `Olá! Vi que você pode estar passando por ${painText}. Temos a solução ideal para você. Posso te contar mais?`,
+    cta: `Comece hoje e transforme seu negócio →`,
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json(mockFallback)
+  }
+
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
   const prompt = `Você é um especialista em copywriting e marketing digital no Brasil.
 Crie 4 peças de conteúdo de alta conversão para a marca abaixo.
@@ -54,12 +66,7 @@ Responda APENAS com um JSON válido neste formato exato (sem markdown):
   try {
     generated = JSON.parse(raw)
   } catch {
-    generated = {
-      headline: `${brandName}: a solução que seu negócio precisava`,
-      postIdea: `Você sabia que ${mainPain?.toLowerCase()}? Por isso criamos ${productDescription?.substring(0, 60)}... Clique no link da bio e saiba mais!`,
-      whatsappMessage: `Olá! Vi que você pode estar passando por ${mainPain?.toLowerCase()}. Temos a solução ideal para você. Posso te contar mais?`,
-      cta: `Comece hoje e transforme seu negócio →`,
-    }
+    generated = mockFallback
   }
 
   // Log usage

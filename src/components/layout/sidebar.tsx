@@ -31,26 +31,30 @@ interface SidebarProps {
   plan?: string
 }
 
-export function Sidebar({
-  generationsUsed = 0,
-  generationsLimit = 40,
-  userEmail = "",
-  userName = "",
-  plan = "basic"
-}: SidebarProps) {
-  const pathname = usePathname()
-  const router = useRouter()
-  const [isOpen, setIsOpen] = useState(false)
-  const supabase = createClient()
+interface SidebarContentProps {
+  pathname: string
+  setIsOpen: (v: boolean) => void
+  handleSignOut: () => void
+  generationsUsed: number
+  generationsLimit: number
+  usagePercent: number
+  plan: string
+  userEmail: string
+  userName: string
+}
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push("/login")
-  }
-
-  const usagePercent = Math.round((generationsUsed / generationsLimit) * 100)
-
-  const SidebarContent = () => (
+function SidebarContent({
+  pathname,
+  setIsOpen,
+  handleSignOut,
+  generationsUsed,
+  generationsLimit,
+  usagePercent,
+  plan,
+  userEmail,
+  userName,
+}: SidebarContentProps) {
+  return (
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-[#1E293B]">
@@ -127,6 +131,26 @@ export function Sidebar({
       </div>
     </div>
   )
+}
+
+export function Sidebar({
+  generationsUsed = 0,
+  generationsLimit = 40,
+  userEmail = "",
+  userName = "",
+  plan = "basic"
+}: SidebarProps) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const [isOpen, setIsOpen] = useState(false)
+  const supabase = createClient()
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push("/login")
+  }
+
+  const usagePercent = Math.round((generationsUsed / generationsLimit) * 100)
 
   return (
     <>
@@ -153,12 +177,32 @@ export function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <SidebarContent />
+        <SidebarContent
+          pathname={pathname}
+          setIsOpen={setIsOpen}
+          handleSignOut={handleSignOut}
+          generationsUsed={generationsUsed}
+          generationsLimit={generationsLimit}
+          usagePercent={usagePercent}
+          plan={plan}
+          userEmail={userEmail}
+          userName={userName}
+        />
       </div>
 
       {/* Desktop sidebar */}
       <div className="hidden md:flex md:flex-col md:w-60 md:fixed md:inset-y-0 bg-[#0F172A] border-r border-[#1E293B]">
-        <SidebarContent />
+        <SidebarContent
+          pathname={pathname}
+          setIsOpen={setIsOpen}
+          handleSignOut={handleSignOut}
+          generationsUsed={generationsUsed}
+          generationsLimit={generationsLimit}
+          usagePercent={usagePercent}
+          plan={plan}
+          userEmail={userEmail}
+          userName={userName}
+        />
       </div>
     </>
   )

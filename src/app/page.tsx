@@ -418,7 +418,7 @@ export default function LandingPage() {
                     <Star key={i} className="w-4 h-4 fill-[#F59E0B] text-[#F59E0B]" />
                   ))}
                 </div>
-                <p className="text-slate-600 text-sm leading-relaxed italic flex-1">"{content}"</p>
+                <p className="text-slate-600 text-sm leading-relaxed italic flex-1">&ldquo;{content}&rdquo;</p>
                 <div className="flex items-center gap-3 pt-2 border-t border-slate-100">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#16A34A] to-[#0F172A] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {name[0]}
